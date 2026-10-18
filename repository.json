@@ -1,0 +1,12 @@
+{
+  "author": "velkovb",
+  "gitHubUrl": "https://github.com/velkovb/hubitat-drivers",
+  "packages": [
+    {
+      "name": "Aqara H2 EU Wall Outlet (Local Zigbee)",
+      "category": "Control",
+      "location": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/drivers/aqara/h2-wall-outlet/packageManifest.json",
+      "description": "Direct/local Zigbee WP-P01D outlet: relay, LED, button lock, power-on memory, power and energy (preview)."
+    }
+  ]
+}

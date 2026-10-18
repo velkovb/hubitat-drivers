@@ -5,7 +5,7 @@
   "dateReleased": "2026-10-18",
   "category": "Control",
   "tags": "Zigbee",
-  "releaseNotes": "Preview v0.6.1: namespace changed to velkovb (breaking driver identity change; existing installations may require manual migration), plus corrected documentation link. No Zigbee logic changes. Protection settings still experimental.",
+  "releaseNotes": "Preview v0.6.1: local Zigbee outlet switching, LED control, button lock, power-on behavior, and observed power and energy reporting. Advanced protection settings remain experimental.",
   "documentationLink": "https://github.com/velkovb/hubitat-drivers/blob/main/drivers/aqara/h2-wall-outlet/README.md",
   "licenseFile": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/LICENSE",
   "drivers": [

@@ -7,7 +7,7 @@ Community driver for the **Aqara H2 EU Wall Outlet** (`WP-P01D`, Zigbee model `l
 > [!WARNING]
 > This driver is experimental. It was developed with significant ChatGPT/AI assistance and iterative hands-on testing on **one Hubitat C-8 and one WP-P01D**. The packaged v0.6.1 source itself has **not yet been re-tested on the hub**; test evidence below comes from earlier development versions. Device firmware revision was not confirmed.
 >
-> **Upgrading from an earlier preview:** v0.6.1 changes the Hubitat driver namespace to `velkovb` without keeping an old-name alias. HPM or your existing device assignment may require manual migration. Back up the working driver, verify the assigned driver type, and test relay control before relying on the updated driver. There has been no independent code/security audit, and compatibility with other firmware or Hubitat models is unknown.
+> There has been no independent code/security audit, and compatibility with other firmware or Hubitat models is unknown.
 
 ## Compatibility
 
@@ -54,8 +54,6 @@ https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/repository.json
 ```
 
 **Manual installation:** Import or paste [`aqara-h2-wall-outlet.groovy`](aqara-h2-wall-outlet.groovy) under Hubitat **Drivers Code**, save it, and select the new driver for the paired WP-P01D device.
-
-**Migrating an existing beta:** Back up the working driver code first. Update the existing Drivers Code entry and verify the relay and settings before using HPM **Match Up** to manage future updates. Avoid adding duplicate driver definitions unnecessarily.
 
 ## Driver commands
 

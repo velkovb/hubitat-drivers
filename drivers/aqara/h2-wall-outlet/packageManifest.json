@@ -1,18 +1,18 @@
 {
   "packageName": "Aqara H2 EU Wall Outlet (Local Zigbee)",
   "author": "velkovb",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "dateReleased": "2026-10-18",
   "category": "Control",
   "tags": "Zigbee",
-  "releaseNotes": "First documented preview: tested relay EP01, LED, physical button lock, previous power-state restore, power and energy reporting. Other modes and protection writes unverified; documentation and attribution updated.",
-  "documentationLink": "https://github.com/velkovb/hubitat-drivers#aqara-h2-eu-wall-outlet",
+  "releaseNotes": "Preview v0.6.1: namespace changed to velkovb (breaking driver identity change; existing installations may require manual migration), plus corrected documentation link. No Zigbee logic changes. Protection settings still experimental.",
+  "documentationLink": "https://github.com/velkovb/hubitat-drivers/blob/main/drivers/aqara/h2-wall-outlet/README.md",
   "licenseFile": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/LICENSE",
   "drivers": [
     {
       "id": "d6e79f8a-cbdf-41d7-828c-5de7e921a070",
       "name": "Aqara H2 Wall Outlet EU (Local Zigbee)",
-      "namespace": "riverpark",
+      "namespace": "velkovb",
       "location": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/drivers/aqara/h2-wall-outlet/aqara-h2-wall-outlet.groovy",
       "required": true
     }

@@ -3,7 +3,7 @@
  * Copyright (c) 2026 velkovb and contributors
  *
  * Aqara Wall Outlet H2 EU WP-P01D (lumi.plug.aeu001)
- * Hubitat Elevation (tested on C-8) — community preview v0.6.0
+ * Hubitat Elevation (tested on C-8) — community preview v0.6.1
  *
  * AI-assisted ("vibe-coded") independent Groovy implementation.
  * Human-tested on one device; NOT independently code-audited or certified.
@@ -18,7 +18,7 @@
  * Use at your own risk and test on one device before wider deployment.
  */
 metadata {
-    definition(name: 'Aqara H2 Wall Outlet EU (Local Zigbee)', namespace: 'riverpark', author: 'velkovb') {
+    definition(name: 'Aqara H2 Wall Outlet EU (Local Zigbee)', namespace: 'velkovb', author: 'velkovb') {
         capability 'Actuator'
         capability 'Switch'
         capability 'Refresh'
@@ -96,7 +96,7 @@ def on()  { [cmdOnOff(1), 'delay 300', readOnOff(relayEp())] }
 def off() { [cmdOnOff(0), 'delay 300', readOnOff(relayEp())] }
 
 def configure() {
-    log.info 'Aqara H2 v0.6.0: read-only configure (no proprietary settings overwritten)'
+    log.info 'Aqara H2 v0.6.1: read-only configure (no proprietary settings overwritten)'
     return refresh()
 }
 
@@ -208,10 +208,10 @@ def setOverloadProtection(BigDecimal value) {
 }
 
 void installed() {
-    sendEvent(name:'driverStatus', value:'v0.6.0 preview: core features tested on one WP-P01D; protection settings experimental')
+    sendEvent(name:'driverStatus', value:'v0.6.1 preview: core features tested on one WP-P01D; protection settings experimental')
 }
 void updated() {
-    sendEvent(name:'driverStatus', value:'v0.6.0 preview: relay endpoint defaults to 01; advanced writes opt-in')
+    sendEvent(name:'driverStatus', value:'v0.6.1 preview: relay endpoint defaults to 01; advanced writes opt-in')
 }
 
 private String endpoint(Map m) {

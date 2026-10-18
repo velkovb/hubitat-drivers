@@ -17,7 +17,7 @@ More devices may be added under `drivers/<manufacturer>/<device>/`.
 
 ## Installation
 
-The preferred installation and update method is **Hubitat Package Manager**.
+The recommended installation method is **Hubitat Package Manager**.
 
 1. Install HPM on your Hubitat if you haven't already.
 2. In HPM, add the following custom repository URL, then select the driver you want to install:
@@ -26,11 +26,9 @@ The preferred installation and update method is **Hubitat Package Manager**.
    https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/repository.json
    ```
 
-3. Follow the *specific driver's README* for any pairing, configuration, migration or safety instructions.
+3. Follow the *specific driver's README* for pairing, configuration and safety instructions.
 
 You can also use HPM's **Install → From a URL** with an individual driver's `packageManifest.json`, linked from that driver's README.
-
-If migrating an already-installed custom driver, back up your working Groovy code and check whether HPM **Match Up** is appropriate before creating duplicate driver entries.
 
 ## Repository structure
 

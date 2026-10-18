@@ -11,7 +11,7 @@ This repository contains custom Hubitat drivers for devices that benefit from lo
 
 | Driver | Protocol | Status | Documentation |
 | --- | --- | --- | --- |
-| [Aqara H2 EU Wall Outlet (WP-P01D)](drivers/aqara/h2-wall-outlet/) | Zigbee | **Preview v0.6.0** — tested on one Hubitat C-8 and one outlet; some features remain experimental | [Features, installation and known limitations](drivers/aqara/h2-wall-outlet/README.md) |
+| [Aqara H2 EU Wall Outlet (WP-P01D)](drivers/aqara/h2-wall-outlet/) | Zigbee | **Preview v0.6.1** — tested on one Hubitat C-8 and one outlet; some features remain experimental | [Features, installation and known limitations](drivers/aqara/h2-wall-outlet/README.md) |
 
 More devices may be added under `drivers/<manufacturer>/<device>/`.
 

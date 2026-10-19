@@ -13,6 +13,8 @@ This repository contains custom Hubitat drivers for devices that benefit from lo
 | --- | --- | --- | --- |
 | [Aqara H2 EU Wall Outlet (WP-P01D)](drivers/aqara/h2-wall-outlet/) | Zigbee | **Preview v0.6.1** — tested on one Hubitat C-8 and one outlet; some features remain experimental | [Features, installation and known limitations](drivers/aqara/h2-wall-outlet/README.md) |
 
+| [Aqara Smart Curtain Motor check-in fix](drivers/aqara/smart-curtain-motor/) | Zigbee | **Preview v1.0.3** — movement and 13-hour check-in trial on one lumi.curtain; GPL-3.0-or-later, HPM available | [Trial and rollback notes](drivers/aqara/smart-curtain-motor/README.md) |
+
 More devices may be added under `drivers/<manufacturer>/<device>/`.
 
 ## Installation

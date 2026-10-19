@@ -1,0 +1,22 @@
+{
+  "packageName": "Aqara Smart Curtain Motor (Check-in Fix)",
+  "author": "velkovb",
+  "version": "1.0.3",
+  "dateReleased": "2026-10-19",
+  "category": "Control",
+  "tags": [
+    "Zigbee"
+  ],
+  "releaseNotes": "Fix stale lastCheckin and false offline recovery by recognizing decoded inbound cluster messages. One lumi.curtain tested for normal movement and roughly 13 hours of regular check-ins. Based on Markus Liljergren v1.0.2.1123; GPL-3.0-or-later.",
+  "documentationLink": "https://github.com/velkovb/hubitat-drivers/tree/main/drivers/aqara/smart-curtain-motor",
+  "licenseFile": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/drivers/aqara/smart-curtain-motor/COPYING",
+  "drivers": [
+    {
+      "id": "601e5c34-3bc9-4416-bad1-f02b04e6cc75",
+      "name": "Zigbee - Aqara Smart Curtain Motor (local check-in fix)",
+      "namespace": "oh-lalabs.com",
+      "location": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/drivers/aqara/smart-curtain-motor/aqara-smart-curtain-motor.groovy",
+      "required": true
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Sources, acknowledgements and third-party notices
 
-This is an independently written **Hubitat Groovy** driver created with AI assistance and human hardware testing. The sources below helped identify Zigbee clusters, Aqara attributes, expected device features and Hubitat APIs. **The project does not bundle source files, libraries, or verbatim implementations from these sources.** Zigbee cluster numbers, attribute IDs, protocols and observations are technical facts; this is not a claim of ownership of the Zigbee or Aqara specifications.
+The Aqara H2 outlet driver is an independently written **Hubitat Groovy** driver created with AI assistance and human hardware testing. The sources below helped identify Zigbee clusters, Aqara attributes, expected device features and Hubitat APIs. **The H2 outlet driver does not bundle source files, libraries, or verbatim implementations from these sources.** The separately listed curtain driver below is a GPL-licensed derivative. Zigbee cluster numbers, attribute IDs, protocols and observations are technical facts; this is not a claim of ownership of the Zigbee or Aqara specifications.
 
 ## Device protocol / manufacturer-specific behavior
 
@@ -21,6 +21,11 @@ This is an independently written **Hubitat Groovy** driver created with AI assis
 ## Licensing and scope
 
 - **This repository's own original Groovy code and documentation:** MIT; see [`LICENSE`](LICENSE). File headers use SPDX-License-Identifier: MIT.
-- **Third-party code bundled in this repository:** none intentionally included. The upstream software licenses above are acknowledged for transparency, not relicensed as part of this project. If code from any source is incorporated in the future, revisit compatibility and preserve all applicable licenses, copyright headers and any required NOTICE files.
+- **Third-party code bundled in this repository:** the Aqara smart curtain motor driver below, licensed GPL-3.0-or-later. The upstream software licenses above are acknowledged for transparency, not relicensed as part of this project. If code from any source is incorporated in the future, revisit compatibility and preserve all applicable licenses, copyright headers and any required NOTICE files.
 - **Third-party trademarks:** Aqara, Hubitat, Zigbee, SmartThings, etc. belong to their owners. This is an unofficial community project, not endorsed by those companies.
 - **Limitations:** This attribution review cannot certify that AI-generated code has no unintentional similarities to unrelated works. Please report any attribution or copyright concerns via GitHub Issues before reusing disputed material.
+
+
+## Aqara smart curtain motor fork
+
+The driver in drivers/aqara/smart-curtain-motor is derived from Markus Liljergren's Zigbee - Aqara Smart Curtain Motor v1.0.2.1123, copyright 2020 Markus Liljergren, GPL-3.0-or-later. Original upstream: https://github.com/markus-li/Hubitat/blob/release/drivers/expanded/zigbee-aqara-smart-curtain-motor-expanded.groovy . Original notices are retained; the local check-in modification is documented in that directory. See its COPYING for the GPL text. The repository's MIT license does not relicense this derived driver.

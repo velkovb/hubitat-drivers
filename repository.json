@@ -7,6 +7,12 @@
       "category": "Control",
       "location": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/drivers/aqara/h2-wall-outlet/packageManifest.json",
       "description": "Direct/local Zigbee WP-P01D outlet: relay, LED, button lock, power-on memory, power and energy (preview)."
+    },
+    {
+      "name": "Aqara Smart Curtain Motor (Check-in Fix)",
+      "category": "Control",
+      "location": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/drivers/aqara/smart-curtain-motor/packageManifest.json",
+      "description": "Aqara curtain driver fork fixing stale check-in and false offline warnings; GPL-3.0-or-later."
     }
   ]
 }

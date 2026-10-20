@@ -1,0 +1,22 @@
+{
+  "packageName": "Aqara H2 EU Wall Switch (WS-K08E)",
+  "author": "velkovb",
+  "version": "0.1.0",
+  "dateReleased": "2026-10-20",
+  "category": "Control",
+  "tags": [
+    "Zigbee"
+  ],
+  "releaseNotes": "First preview: independent relay children, four physical button presses, lower double/hold/release, both decoupled modes, remote relay locks, LED settings and final states for all four recovery modes verified on one WS-K08E. Metering accuracy, startup output transients and long-term reliability remain unverified.",
+  "documentationLink": "https://github.com/velkovb/hubitat-drivers/tree/main/drivers/aqara/h2-eu-wall-switch",
+  "licenseFile": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/LICENSE",
+  "drivers": [
+    {
+      "id": "aaedb409-f269-4b19-844b-9b2f2c5c8080",
+      "name": "Aqara H2 EU 4 Button 2 Relay (WS-K08E)",
+      "namespace": "velkovb",
+      "location": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/drivers/aqara/h2-eu-wall-switch/aqara-h2-eu-ws-k08e.groovy",
+      "required": true
+    }
+  ]
+}

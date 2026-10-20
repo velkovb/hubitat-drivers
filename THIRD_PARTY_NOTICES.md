@@ -29,3 +29,15 @@ The Aqara H2 outlet driver is an independently written **Hubitat Groovy** driver
 ## Aqara smart curtain motor fork
 
 The driver in drivers/aqara/smart-curtain-motor is derived from Markus Liljergren's Zigbee - Aqara Smart Curtain Motor v1.0.2.1123, copyright 2020 Markus Liljergren, GPL-3.0-or-later. Original upstream: https://github.com/markus-li/Hubitat/blob/release/drivers/expanded/zigbee-aqara-smart-curtain-motor-expanded.groovy . Original notices are retained; the local check-in modification is documented in that directory. See its COPYING for the GPL text. The repository's MIT license does not relicense this derived driver.
+
+## Aqara H2 EU WS-K08E wall switch
+
+The driver in `drivers/aqara/h2-eu-wall-switch` is independently implemented under
+the repository MIT license. Protocol references: [Zigbee2MQTT WS-K08E](https://www.zigbee2mqtt.io/devices/WS-K08E.html),
+[zigbee-herdsman-converters](https://github.com/Koenkk/zigbee-herdsman-converters) (MIT),
+[ldeora's SmartThings H2 implementation](https://github.com/ldeora/SmartThingsEdgeDrivers/tree/main/aqara-h2-wall-switches),
+and [Rylan Hazelton's Hubitat H2 US driver](https://github.com/krazik/hubitat-drivers/blob/main/AqaraH2Switch.groovy)
+(source header: Apache-2.0, based on Preston Brown's work). These informed protocol
+facts and platform conventions; their implementations and the Groovy test runtime
+are not bundled. The EU driver uses its own endpoint mapping, parser, configuration
+handling and tests; the US driver's hold/release mapping is not applicable here.

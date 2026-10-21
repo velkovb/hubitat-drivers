@@ -19,6 +19,12 @@
       "category": "Control",
       "location": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/drivers/aqara/h2-eu-wall-switch/packageManifest.json",
       "description": "WS-K08E Zigbee preview: two relay children, four buttons, Aqara settings and aggregate metering. Core controls tested; loaded metering unverified."
+    },
+    {
+      "name": "Aqara Floor Heating Thermostat W500",
+      "category": "Climate Control",
+      "location": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/drivers/aqara/floor-heating-thermostat-w500/packageManifest.json",
+      "description": "W500 UT-A01E local Zigbee preview: thermostat, six presets, Aqara settings and metering. Controls/settings tested; relay/icon confirmed; loaded metering and OTA unverified."
     }
   ]
 }

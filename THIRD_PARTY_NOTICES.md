@@ -41,3 +41,20 @@ and [Rylan Hazelton's Hubitat H2 US driver](https://github.com/krazik/hubitat-dr
 facts and platform conventions; their implementations and the Groovy test runtime
 are not bundled. The EU driver uses its own endpoint mapping, parser, configuration
 handling and tests; the US driver's hold/release mapping is not applicable here.
+
+
+## Aqara W500 floor heating thermostat
+
+The driver in `drivers/aqara/floor-heating-thermostat-w500` is independently
+implemented under the repository MIT license. Protocol facts were checked against
+[Zigbee2MQTT](https://www.zigbee2mqtt.io/devices/UT-A01E.html) and
+[zigbee-herdsman-converters](https://github.com/Koenkk/zigbee-herdsman-converters)
+(MIT), including thermostat/manufacturer attribute encodings, W500 metering scaling
+and NTC readback quirks. Hubitat API conventions were checked against its on-hub
+documentation and [official examples](https://github.com/hubitat/HubitatPublic).
+No upstream driver implementation or Groovy runtime is bundled.
+
+
+The Manual preset encoding was additionally cross-checked against
+[Thomas Lohner's W500 ZHA quirk](https://gist.github.com/ThomasLohner/39f14592e7ae123d07aef97f9b5fb184).
+Only a protocol constant informed this correction; no implementation was copied.

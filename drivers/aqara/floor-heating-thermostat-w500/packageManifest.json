@@ -1,0 +1,22 @@
+{
+  "packageName": "Aqara Floor Heating Thermostat W500",
+  "author": "velkovb",
+  "version": "0.1.1",
+  "dateReleased": "2026-10-21",
+  "category": "Climate Control",
+  "tags": [
+    "Zigbee"
+  ],
+  "releaseNotes": "W500 Zigbee preview: heat/off/setpoint, six presets and reversible settings verified with live readbacks; owner confirmed relay clicks and heating icon. Correct Manual preset to 255 and clear stale preset labels on unknown values. Loaded metering and successful OTA remain unverified.",
+  "documentationLink": "https://github.com/velkovb/hubitat-drivers/tree/main/drivers/aqara/floor-heating-thermostat-w500",
+  "licenseFile": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/LICENSE",
+  "drivers": [
+    {
+      "id": "69aca3f2-e223-4df0-9bc1-2684093a87d2",
+      "name": "Aqara Floor Heating Thermostat W500",
+      "namespace": "velkovb",
+      "location": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/drivers/aqara/floor-heating-thermostat-w500/aqara-w500.groovy",
+      "required": true
+    }
+  ]
+}

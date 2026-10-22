@@ -1,13 +1,13 @@
 {
   "packageName": "Aqara H2 EU Wall Switch (WS-K08E)",
   "author": "velkovb",
-  "version": "0.1.0",
-  "dateReleased": "2026-10-20",
+  "version": "0.2.0",
+  "dateReleased": "2026-10-22",
   "category": "Control",
   "tags": [
     "Zigbee"
   ],
-  "releaseNotes": "First preview: independent relay children, four physical button presses, lower double/hold/release, both decoupled modes, remote relay locks, LED settings and final states for all four recovery modes verified on one WS-K08E. Metering accuracy, startup output transients and long-term reliability remain unverified.",
+  "releaseNotes": "Adds verified firmware file version, hardware revision and date code diagnostics. Native OTA delegation is experimental: live request fails with Hubitat status C3 and no image selected; no firmware change occurred. Unsupported OTA client attribute reads are omitted. Local regression tests and Hubitat compilation pass.",
   "documentationLink": "https://github.com/velkovb/hubitat-drivers/tree/main/drivers/aqara/h2-eu-wall-switch",
   "licenseFile": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/LICENSE",
   "drivers": [

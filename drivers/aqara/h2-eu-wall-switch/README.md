@@ -1,6 +1,6 @@
 # Aqara H2 EU WS-K08E / WS-K08D for Hubitat
 
-Version 0.1.0, experimental. Zigbee model `lumi.switch.agl010` only.
+Version 0.2.0, preview. Zigbee model `lumi.switch.agl010` only.
 Independent Groovy implementation; protocol references are linked below. MIT; see the repository LICENSE.
 
 ## Device layout
@@ -59,7 +59,7 @@ the device's reported multipliers/divisors; values are withheld until scaling is
 known. Analog power at endpoint 21 is in watts and takes precedence for 120 seconds.
 Current uses the WS-K08E-specific unscaled value documented by Zigbee2MQTT. Current
 reporting is not forcibly configured because the model is known to reject it.
-No OTA updates, proprietary heartbeat decoding, or energy reset are implemented.
+No proprietary heartbeat decoding or energy reset is implemented. Native OTA requests and firmware diagnostics are described below.
 
 ## Initial validation on 19 October 2026
 
@@ -124,6 +124,63 @@ Still untested: loaded power/current/energy accuracy, physical button behavior
 while relay-locked, long-term reliability, no-neutral operation and other firmware
 versions. Software-generated button events are covered by implementation but were
 not tested through a dashboard or automation in this hardware trial.
+
+## Firmware diagnostics and native OTA
+
+`readFirmwareInfo` reads, without changing settings:
+
+- Basic cluster: hardware version, date code and optional software build string (unsupported on the tested firmware).
+- Aqara manufacturer cluster `0xFCC0`, attribute `0x00EE`: firmware file version.
+- OTA response parsing is available, but the device does not expose its OTA client attributes through ordinary server attribute reads. Those reads are deliberately omitted.
+
+These appear in Current States and the device Data section. Firmware file version
+is shown in decimal and hexadecimal, with its reporting source. It is distinct
+from `driverVersion`, and is not converted into a guessed vendor marketing version.
+Refresh includes these reads. Unsupported or missing attributes remain absent;
+that does not mean the device cannot perform OTA.
+
+`updateFirmware` delegates to Hubitat's built-in `zigbee.updateFirmware()` service,
+following Hubitat's public Generic Zigbee RGBW example. It requires the reported
+model to be `lumi.switch.agl010`. This is **not a check-only command**: if Hubitat
+offers a matching newer image, a transfer may start. Monitor Hubitat live logs.
+The driver records that the request was made; that status is not evidence of a
+successful transfer. Read the firmware again afterward to verify any change.
+
+Hubitat controls its own firmware catalog. A firmware file appearing in
+Zigbee2MQTT's catalog does not establish that Hubitat hosts it. This driver does
+not upload firmware files, accept arbitrary URLs, force versions or downgrade.
+
+The Zigbee2MQTT OTA catalog inspected on 20 October 2026 has an exact-model entry
+for `lumi.switch.agl010`: manufacturer `0x115F`, image type `0x1920`, file version
+5658 (`0x0000161A`), size 730314 bytes. The filename includes `0.0.0_2226`;
+5658 is the decimal file-version value, not a semantic version string. The
+original Aqara CDN URL and SHA-512 are in the upstream index.
+
+Firmware diagnostic parser tests and native-command delegation tests pass locally.
+The v0.2.0 driver compiled on Hubitat. Live results are recorded below.
+
+References:
+- [Hubitat's native OTA example](https://github.com/hubitat/HubitatPublic/blob/master/examples/drivers/GenericZigbeeRGBWBulb.groovy)
+- [Zigbee2MQTT OTA index](https://github.com/Koenkk/zigbee-OTA/blob/master/index.json)
+- [WS-K08E OTA support](https://www.zigbee2mqtt.io/devices/WS-K08E.html)
+
+### Live firmware/OTA trial, 22 October 2026
+
+- Firmware file version: **5658 / 0x0000161A**, read from Aqara `FCC0/00EE`.
+- Hardware version: **01**. Device date code: **20250827** (not an installation date).
+- Basic software build attribute `4000` returned unsupported (`86`); no valid software build string was obtained.
+- This file version matches the exact-model Zigbee2MQTT catalog entry inspected during development. That is not proof that no newer Aqara release exists elsewhere.
+- Native OTA request was attempted. Hubitat logged: `imageFileName:null, fileVersion:null ... failed, status:C3`.
+- Retrying with the model's manufacturer/image-family identifiers and endpoint handling produced the same error. The root cause is not established; this is not evidence of a successful check for newer firmware or of catalog availability.
+- No image transfer or firmware change was observed. End-to-end OTA remains **unverified**.
+- An initial multi-attribute read of OTA client attributes produced bogus Hubitat Data (`firmwareMT=8600-0006-86000786`, `softwareBuild=86000786`). These are unsupported-response bytes, not device versions. Those reads were removed and the exact bogus entries cleaned up. Basic software build reads now skip unsupported responses correctly.
+- Debug logging was restored off. Firmware version remains 5658.
+
+The `updateFirmware` command is experimental native delegation; it is not an
+independent updater. The known-family overrides do not supply an image or force a
+version. Use hub logs for the actual result; the driver's request status only
+means the command was submitted. Ask Hubitat about C3/support for this exact model
+before advertising OTA as working through this driver.
 
 ## Rollback
 

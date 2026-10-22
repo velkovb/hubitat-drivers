@@ -1,12 +1,12 @@
 /*
- * Aqara H2 EU WS-K08E / WS-K08D - Hubitat driver, v0.1.0
+ * Aqara H2 EU WS-K08E / WS-K08D - Hubitat driver, v0.2.0
  * Copyright 2026 Borislav Velkov. SPDX-License-Identifier: MIT
  * Independently implemented from the protocol references listed in README.md.
  * Preview: core controls tested on one WS-K08E; metering accuracy unverified.
  */
 import groovy.transform.Field
 
-@Field static final String VERSION = '0.1.0'
+@Field static final String VERSION = '0.2.0'
 @Field static final Map BUTTONS = [1:1, 2:2, 4:3, 5:4]
 @Field static final Map ACTIONS = [0:'held', 1:'pushed', 2:'doubleTapped', 255:'released']
 @Field static final Map OPTIONS = [
@@ -33,6 +33,18 @@ metadata {
         capability 'PowerMeter'
         capability 'EnergyMeter'
         capability 'CurrentMeter'
+        command 'readFirmwareInfo'
+        command 'updateFirmware'
+        attribute 'firmwareFileVersion', 'number'
+        attribute 'firmwareFileVersionHex', 'string'
+        attribute 'firmwareSource', 'string'
+        attribute 'softwareBuild', 'string'
+        attribute 'hardwareVersion', 'string'
+        attribute 'dateCode', 'string'
+        attribute 'otaManufacturerCode', 'string'
+        attribute 'otaImageType', 'string'
+        attribute 'otaUpgradeStatus', 'string'
+        attribute 'otaRequestStatus', 'string'
         attribute 'driverVersion', 'string'
         attribute 'lastSeen', 'string'
         attribute 'leftSwitch', 'enum', ['on','off']
@@ -137,7 +149,34 @@ List<String> refresh() {
     commands += readAttr(1, 0x0B04, [0x0604,0x0605,0x050B,0x0508])
     commands += readAttr(1, 0x0702, [0x0300,0x0301,0x0302,0x0000])
     commands += readAttr(21, 0x000C, 0x0055)
-    commands
+    commands + readFirmwareInfo()
+}
+
+// Read-only diagnostics, with explicit endpoint 1 (the join's saved endpoint can be 21).
+List<String> readFirmwareInfo() {
+    sendEvent(name:'driverVersion', value:VERSION)
+    // Do not read OTA client attributes as server attributes. On this device they
+    // return unsupported records which Hubitat can mistake for a Query Next Image.
+    // Clean up only the exact bogus values observed during the initial probe.
+    if (device.getDataValue('firmwareMT') == '8600-0006-86000786') device.removeDataValue('firmwareMT')
+    if (device.getDataValue('softwareBuild') == '86000786') device.removeDataValue('softwareBuild')
+    readAttr(1, 0x0000, [0x0003,0x0006,0x4000]) +
+        readAttr(1, 0xFCC0, 0x00EE)
+}
+
+// Delegates to Hubitat's own catalog and OTA service; no custom URL or force option.
+// This can start a transfer if the hub has a compatible newer image: it is NOT check-only.
+List<String> updateFirmware() {
+    if (device.getDataValue('model') != 'lumi.switch.agl010') {
+        log.warn 'OTA request refused: device model has not been verified as lumi.switch.agl010'
+        return []
+    }
+    log.info "${device.displayName}: requesting Zigbee OTA via Hubitat; watch hub live logs for availability and progress"
+    sendEvent(name:'otaRequestStatus', value:'Requested via Hubitat; see live logs')
+    // This exact model uses OTA on ep1; joining can leave the saved endpoint at 21.
+    // Manufacturer/type identify its image family, not a forced firmware version.
+    device.updateDataValue('endpointId', '01')
+    zigbee.updateFirmware(manufacturer:0x115F, type:0x1920)
 }
 
 void push(Object button) { digitalButton('pushed', button) }
@@ -177,11 +216,23 @@ void handleAttribute(Integer cluster, Integer ep, Integer attr, String value, St
         if (attr == 4) device.updateDataValue('manufacturer', value)
         if (attr == 5) device.updateDataValue('model', value)
         if (attr == 1) device.updateDataValue('application', value)
+        if (attr == 3) reportDiagnostic('hardwareVersion', value)
+        if (attr == 6) reportDiagnostic('dateCode', value)
+        if (attr == 0x4000) reportDiagnostic('softwareBuild', value)
         return
     }
     Long n = hexLong(value)
     if (n == null) return
-    if (cluster == 0x0006 && attr == 0 && ep in [1,2] && n in [0L,1L]) {
+    if (cluster == 0x0019 && ep == 1) {
+        if (attr == 2 && n != 0xFFFFFFFFL) reportFirmware(n, 'OTA currentFileVersion')
+        if (attr == 7 && n != 65535L) reportDiagnostic('otaManufacturerCode', String.format('0x%04X', n))
+        if (attr == 8 && n != 65535L) reportDiagnostic('otaImageType', String.format('0x%04X', n))
+        if (attr == 6) {
+            Map statuses = [0:'Normal', 1:'Download in progress', 2:'Download complete', 3:'Waiting to upgrade',
+                4:'Countdown to upgrade', 5:'Waiting for more images', 6:'Waiting to upgrade via external event']
+            reportDiagnostic('otaUpgradeStatus', statuses[n.intValue()] ?: "Unknown (${n})")
+        }
+    } else if (cluster == 0x0006 && attr == 0 && ep in [1,2] && n in [0L,1L]) {
         String relayState = n == 1L ? 'on' : 'off'
         getChildDevice(childDni(ep))?.parse([[name:'switch', value:relayState]])
         sendEvent(name:ep == 1 ? 'leftSwitch' : 'rightSwitch', value:relayState)
@@ -195,6 +246,7 @@ void handleAttribute(Integer cluster, Integer ep, Integer attr, String value, St
             info("Button ${button} ${action}")
         }
     } else if (cluster == 0xFCC0) {
+        if (ep == 1 && attr == 0x00EE && n != 0xFFFFFFFFL) reportFirmware(n, 'Aqara FCC0/00EE')
         OPTIONS.each { key,spec ->
             if (spec.ep == ep && spec.attr == attr) {
                 def entry = spec.values.find { k,v -> v == n }
@@ -223,6 +275,15 @@ void handleAttribute(Integer cluster, Integer ep, Integer attr, String value, St
             sendEvent(name:'power', value:watts, unit:'W')
         }
     }
+}
+void reportDiagnostic(String name, String value) {
+    device.updateDataValue(name, value)
+    sendEvent(name:name, value:value)
+}
+void reportFirmware(Long value, String source) {
+    reportDiagnostic('firmwareFileVersion', value.toString())
+    reportDiagnostic('firmwareFileVersionHex', String.format('0x%08X', value))
+    reportDiagnostic('firmwareSource', source)
 }
 void publishPower() {
     if (state.analogPowerTime != null && now() - (state.analogPowerTime as Long) < 120000L) return

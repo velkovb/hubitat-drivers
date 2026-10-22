@@ -5,7 +5,7 @@ class DriverHarness extends Script {
     def events = [], children = [:], sent = [], data = [:]
     def state = [:], settings = [:]
     def device = [deviceNetworkId:'5C96', zigbeeId:'0011223344556677', displayName:'H2',
-                  updateDataValue:{ k,v -> data[k] = v }, updateSetting:{ k,v -> settings[k] = v.value }]
+                  updateDataValue:{ k,v -> data[k] = v }, getDataValue:{ k -> data[k] }, removeDataValue:{ k -> data.remove(k) }, updateSetting:{ k,v -> settings[k] = v.value }]
     def location = [timeZone:TimeZone.getTimeZone('Europe/Sofia')]
     def log = [info:{ x -> }, debug:{ x -> }, warn:{ x -> }]
     def zigbee = new ZigbeeStub()
@@ -116,3 +116,41 @@ assert !driver.zigbee.calls.find { it.name == 'writeAttribute' }
 assert !driver.zigbee.calls.find { it.name == 'configureReporting' && it.args[0] == 0x0012 }
 assert !driver.zigbee.calls.find { it.name == 'command' }
 println 'PASS: real-driver parser, child routing, EU gestures, preference encoding, meter scaling, and non-actuating configuration.'
+
+report('01','FCC0','00EE','0000161A','01')
+assert driver.data.firmwareFileVersion == '5658'
+assert driver.data.firmwareFileVersionHex == '0x0000161A'
+assert driver.data.firmwareSource == 'Aqara FCC0/00EE'
+report('01','0000','4000','0.0.0_2226','01')
+report('01','0000','0003','04','01')
+report('01','0000','0006','20250827','01')
+assert driver.data.softwareBuild == '0.0.0_2226'
+assert driver.data.hardwareVersion == '04'
+assert driver.data.dateCode == '20250827'
+driver.parseMap([endpoint:'01',clusterInt:0x0019,attrId:'0002',value:'0000161A',command:'01',
+    additionalAttrs:[[attrId:'0007',value:'115F'],[attrId:'0008',value:'1920'],[attrId:'0006',value:'00']]])
+assert driver.data.otaManufacturerCode == '0x115F'
+assert driver.data.otaImageType == '0x1920'
+assert driver.data.otaUpgradeStatus == 'Normal'
+assert driver.data.firmwareSource == 'OTA currentFileVersion'
+report('01','0019','0002','FFFFFFFF','01')
+assert driver.data.firmwareFileVersion == '5658'
+driver.zigbee.calls.clear()
+driver.data.firmwareMT = '8600-0006-86000786'
+driver.data.softwareBuild = '86000786'
+driver.readFirmwareInfo()
+assert !driver.data.containsKey('firmwareMT')
+assert !driver.data.containsKey('softwareBuild')
+assert driver.zigbee.calls.every { it.name == 'readAttribute' && it.args[2].destEndpoint == 1 }
+assert !driver.zigbee.calls.find { it.args[0] == 0x0019 }
+assert driver.zigbee.calls.find { it.args[0] == 0xFCC0 }.args[2].mfgCode == 0x115F
+driver.zigbee.calls.clear()
+driver.data.model = 'wrong-model'
+assert driver.updateFirmware() == []
+assert driver.zigbee.calls.empty
+driver.data.model = 'lumi.switch.agl010'
+driver.updateFirmware()
+assert driver.zigbee.calls*.name == ['updateFirmware']
+assert driver.zigbee.calls[0].args == [[manufacturer:0x115F,type:0x1920]]
+assert driver.data.endpointId == '01'
+println 'PASS: firmware readbacks, Aqara file version, OTA identifiers/status, invalid sentinel, read-only diagnostics, guarded native OTA delegation.'

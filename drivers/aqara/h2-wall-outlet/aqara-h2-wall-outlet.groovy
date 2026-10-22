@@ -3,7 +3,7 @@
  * Copyright (c) 2026 velkovb and contributors
  *
  * Aqara Wall Outlet H2 EU WP-P01D (lumi.plug.aeu001)
- * Hubitat Elevation (tested on C-8) — community preview v0.6.1
+ * Hubitat Elevation (tested on C-8) — community preview v0.7.0
  *
  * AI-assisted ("vibe-coded") independent Groovy implementation.
  * Human-tested on one device; NOT independently code-audited or certified.
@@ -30,6 +30,8 @@ metadata {
 
         command 'refreshSettings'
         command 'probeMetering'
+        command 'readFirmwareInfo'
+        command 'updateFirmware'
         command 'setLed', [[name: 'LED', type: 'ENUM', constraints: ['on', 'off']]]
         command 'setButtonLock', [[name: 'Physical button', type: 'ENUM', constraints: ['lock', 'unlock']]]
         command 'setPowerOnBehavior', [[name: 'After power returns', type: 'ENUM', constraints: ['on', 'previous', 'off', 'inverted']]]
@@ -47,6 +49,16 @@ metadata {
         attribute 'powerOutageCount', 'number'
         attribute 'meteringSource', 'string'
         attribute 'driverStatus', 'string'
+        attribute 'driverVersion', 'string'
+        attribute 'firmwareFileVersion', 'number'
+        attribute 'firmwareFileVersionHex', 'string'
+        attribute 'firmwareSource', 'string'
+        attribute 'firmwareVersionStatus', 'string'
+        attribute 'application', 'string'
+        attribute 'softwareBuild', 'string'
+        attribute 'hardwareVersion', 'string'
+        attribute 'dateCode', 'string'
+        attribute 'otaRequestStatus', 'string'
 
         fingerprint profileId: '0104', model: 'lumi.plug.aeu001', deviceJoinName: 'Aqara H2 Wall Outlet EU'
     }
@@ -96,14 +108,76 @@ def on()  { [cmdOnOff(1), 'delay 300', readOnOff(relayEp())] }
 def off() { [cmdOnOff(0), 'delay 300', readOnOff(relayEp())] }
 
 def configure() {
-    log.info 'Aqara H2 v0.6.1: read-only configure (no proprietary settings overwritten)'
+    log.info 'Aqara H2 v0.7.0: read-only configure (no proprietary settings overwritten)'
     return refresh()
 }
 
 def refresh() {
     List<String> commands = [readOnOff(relayEp()), 'delay 160']
     commands.addAll(probeMeteringCommands())
+    commands.addAll(readFirmwareInfo())
     return commands
+}
+
+// Read identity and firmware only. No OTA-client attribute reads: some Aqara
+// devices reject those in a way Hubitat misinterprets as firmware metadata.
+def readFirmwareInfo() {
+    sendEvent(name:'driverVersion', value:'0.7.0')
+    List<String> cmds = []
+    [0x0004, 0x0005, 0x0001, 0x0003, 0x0006, 0x4000].each { attr ->
+        cmds << readEp(1, 0x0000, attr)
+        cmds << 'delay 200'
+    }
+    cmds.addAll(manufacturerRead(0x00EE))
+    cmds
+}
+
+// Experimental native delegation: may start a transfer, not a check-only command.
+// The manufacturer is known; image type/version are learned by Hubitat, not forced.
+def updateFirmware() {
+    if (device.getDataValue('model') != 'lumi.plug.aeu001') {
+        log.warn 'OTA request refused: first verify lumi.plug.aeu001 with Read Firmware Info'
+        return []
+    }
+    log.info "${device.displayName}: requesting native Zigbee OTA; see Hubitat live logs for the actual result"
+    sendEvent(name:'otaRequestStatus', value:'Requested via Hubitat; see live logs')
+    zigbee.updateFirmware(manufacturer:0x115F)
+}
+
+private boolean firmwareAttributes(Map m) {
+    int cl = m.clusterInt != null ? m.clusterInt as int : -1
+    if (endpoint(m) != '01') return false
+    if (!(cl in [0x0000,0xFCC0])) return false
+    boolean basic = cl == 0x0000
+    ([m] + (m.additionalAttrs ?: [])).each { Map a ->
+        if (a.status != null && a.status != '00') return
+        if (a.value == null) return
+        int attr = a.attrInt != null ? a.attrInt as int : (a.attrId ? Integer.parseInt(a.attrId.toString(),16) : -1)
+        String value = a.value.toString()
+        if (basic) {
+            String key = [4:'manufacturer',5:'model',1:'application',3:'hardwareVersion',6:'dateCode',0x4000:'softwareBuild'][attr]
+            if (key && value) {
+                device.updateDataValue(key, value)
+                if (!(key in ['manufacturer','model'])) sendEvent(name:key, value:value)
+            }
+        } else if (attr == 0x00EE && value ==~ /[0-9a-fA-F]{1,8}/) {
+            long fileVersion = Long.parseLong(value,16)
+            if (fileVersion == 0xFFFFFFFFL) return
+            String hexVersion = String.format('0x%08X',fileVersion)
+            device.updateDataValue('firmwareFileVersion', fileVersion.toString())
+            device.updateDataValue('firmwareFileVersionHex', hexVersion)
+            device.updateDataValue('firmwareSource', 'Aqara FCC0/00EE')
+            sendEvent(name:'firmwareFileVersion', value:fileVersion)
+            sendEvent(name:'firmwareFileVersionHex', value:hexVersion)
+            sendEvent(name:'firmwareSource', value:'Aqara FCC0/00EE')
+            // Zero is returned by the tested outlet. Retain the raw value, but
+            // do not imply that its installed OTA image version is confirmed.
+            String status = fileVersion == 0L ? 'Unconfirmed: Aqara field returned zero' : 'Reported by Aqara FCC0/00EE'
+            device.updateDataValue('firmwareVersionStatus', status)
+            sendEvent(name:'firmwareVersionStatus', value:status)
+        }
+    }
+    basic
 }
 
 def probeMetering() {
@@ -208,10 +282,10 @@ def setOverloadProtection(BigDecimal value) {
 }
 
 void installed() {
-    sendEvent(name:'driverStatus', value:'v0.6.1 preview: core features tested on one WP-P01D; protection settings experimental')
+    sendEvent(name:'driverStatus', value:'v0.7.0 preview: firmware diagnostics added; native OTA experimental')
 }
 void updated() {
-    sendEvent(name:'driverStatus', value:'v0.6.1 preview: relay endpoint defaults to 01; advanced writes opt-in')
+    sendEvent(name:'driverStatus', value:'v0.7.0 preview: relay endpoint defaults to 01; advanced writes opt-in')
 }
 
 private String endpoint(Map m) {
@@ -351,6 +425,7 @@ def parse(String description) {
     try { m = zigbee.parseDescriptionAsMap(description) }
     catch (Exception ignored) { return }
     if (m == null) return
+    if (firmwareAttributes(m)) return
     String ep = endpoint(m)
     int cl = m.clusterInt != null ? (m.clusterInt as int) : -1
     int at = m.attrInt != null ? (m.attrInt as int) : -1

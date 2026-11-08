@@ -58,3 +58,7 @@ No upstream driver implementation or Groovy runtime is bundled.
 The Manual preset encoding was additionally cross-checked against
 [Thomas Lohner's W500 ZHA quirk](https://gist.github.com/ThomasLohner/39f14592e7ae123d07aef97f9b5fb184).
 Only a protocol constant informed this correction; no implementation was copied.
+
+## Zemismart ZMS-206EU-2 screen switch
+
+The MIT-licensed driver in `drivers/zemismart/zms-206eu-2` uses the device fingerprints and Tuya datapoint mappings documented by [Zigbee2MQTT](https://www.zigbee2mqtt.io/devices/ZMS-206EU-2.html) and [zigbee-herdsman-converters](https://github.com/Koenkk/zigbee-herdsman-converters). [zigbee-herdsman](https://github.com/Koenkk/zigbee-herdsman) was consulted for the wire format. The driver is an independent Groovy implementation and bundles neither upstream project.

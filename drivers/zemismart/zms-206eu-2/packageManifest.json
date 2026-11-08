@@ -1,0 +1,22 @@
+{
+  "packageName": "Zemismart ZMS-206EU-2 Screen Switch",
+  "author": "velkovb",
+  "version": "0.2.0",
+  "dateReleased": "2026-11-08",
+  "category": "Control",
+  "tags": [
+    "Zigbee"
+  ],
+  "releaseNotes": "Initial public preview. Two independent relay children and panel settings. Relay control, state reports, screen names and 60-second radar readback verified on one ZMS-206EU-2-B.",
+  "documentationLink": "https://github.com/velkovb/hubitat-drivers/tree/main/drivers/zemismart/zms-206eu-2",
+  "licenseFile": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/LICENSE",
+  "drivers": [
+    {
+      "id": "ef3dbcdb-8a0c-4a31-81dc-414e4037c562",
+      "name": "Zemismart ZMS-206EU-2 Screen Switch",
+      "namespace": "velkovb",
+      "location": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/drivers/zemismart/zms-206eu-2/zemismart-zms-206eu-2.groovy",
+      "required": true
+    }
+  ]
+}

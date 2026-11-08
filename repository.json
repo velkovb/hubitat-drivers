@@ -25,6 +25,12 @@
       "category": "Climate Control",
       "location": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/drivers/aqara/floor-heating-thermostat-w500/packageManifest.json",
       "description": "W500 UT-A01E local Zigbee preview: thermostat, six presets, Aqara settings and metering. Controls/settings tested; relay/icon confirmed; loaded metering and OTA unverified."
+    },
+    {
+      "name": "Zemismart ZMS-206EU-2 Screen Switch",
+      "category": "Control",
+      "location": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/drivers/zemismart/zms-206eu-2/packageManifest.json",
+      "description": "ZMS-206EU-2 local Zigbee preview: two relay children and configurable screen names, colors, backlight and wake timeout."
     }
   ]
 }

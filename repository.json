@@ -37,6 +37,12 @@
       "category": "Control",
       "location": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/drivers/moes/star-feather/packageManifest.json",
       "description": "Local Zigbee driver for 1–4 gang Star Feather switches with relay, scene, lighting and timer controls."
+    },
+    {
+      "name": "Aqara SJCGQ11LM Water Leak Sensor",
+      "category": "Security",
+      "location": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/drivers/aqara/sjcgq11lm/packageManifest.json",
+      "description": "Local Zigbee leak detection with wet and dry timestamps, battery telemetry, and offline monitoring."
     }
   ]
 }

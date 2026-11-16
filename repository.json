@@ -31,6 +31,12 @@
       "category": "Control",
       "location": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/drivers/zemismart/zms-206eu-2/packageManifest.json",
       "description": "ZMS-206EU-2 local Zigbee preview: two relay children and configurable screen names, colors, backlight and wake timeout."
+    },
+    {
+      "name": "MOES Star Feather Zigbee Switch",
+      "category": "Control",
+      "location": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/drivers/moes/star-feather/packageManifest.json",
+      "description": "Local Zigbee driver for 1–4 gang Star Feather switches with relay, scene, lighting and timer controls."
     }
   ]
 }

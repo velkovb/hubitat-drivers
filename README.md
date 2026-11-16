@@ -16,6 +16,7 @@ This repository contains custom Hubitat drivers for devices that benefit from lo
 | [Aqara H2 EU Wall Switch (WS-K08E)](drivers/aqara/h2-eu-wall-switch/) | Zigbee | **Preview v0.2.0** — firmware diagnostics verified; core controls tested; loaded metering and native OTA transfer unverified | [Installation and validation](drivers/aqara/h2-eu-wall-switch/README.md) |
 | [Aqara Floor Heating Thermostat W500](drivers/aqara/floor-heating-thermostat-w500/) | Zigbee | **Preview v0.1.1** - controls, presets and settings tested; relay/icon confirmed; loaded metering and OTA unverified | [Features and validation](drivers/aqara/floor-heating-thermostat-w500/README.md) |
 | [Zemismart ZMS-206EU-2 Screen Switch](drivers/zemismart/zms-206eu-2/) | Zigbee | **Preview v0.2.0** — both relays, screen names and 60-second radar timeout readback verified on one ZMS-206EU-2-B | [Installation and validation](drivers/zemismart/zms-206eu-2/README.md) |
+| [MOES Star Feather Zigbee Switch](drivers/moes/star-feather/) | Zigbee | **Preview v0.1.0** — one to four gangs with relay, scene and timer controls | [Features and installation](drivers/moes/star-feather/README.md) |
 
 More devices may be added under `drivers/<manufacturer>/<device>/`.
 

@@ -1,0 +1,21 @@
+{
+  "packageName": "MOES Star Feather Zigbee Switch",
+  "author": "velkovb",
+  "version": "0.1.0",
+  "dateReleased": "2026-11-16",
+  "category": "Control",
+  "tags": [
+    "Zigbee"
+  ],
+  "documentationLink": "https://github.com/velkovb/hubitat-drivers/tree/main/drivers/moes/star-feather",
+  "licenseFile": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/LICENSE",
+  "drivers": [
+    {
+      "id": "b40ef6b9-955c-4093-aa13-b83902e3440a",
+      "name": "MOES Star Feather Zigbee Switch",
+      "namespace": "velkovb",
+      "location": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/drivers/moes/star-feather/moes-star-feather.groovy",
+      "required": true
+    }
+  ]
+}

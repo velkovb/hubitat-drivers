@@ -1,0 +1,23 @@
+{
+  "packageName": "Aqara SJCGQ11LM Water Leak Sensor",
+  "author": "velkovb",
+  "version": "1.0.0",
+  "dateReleased": "2026-11-16",
+  "category": "Security",
+  "tags": [
+    "Water",
+    "Zigbee"
+  ],
+  "releaseNotes": "Initial HPM release. Wet and dry timestamps and battery reporting verified on Hubitat.",
+  "documentationLink": "https://github.com/velkovb/hubitat-drivers/tree/main/drivers/aqara/sjcgq11lm",
+  "licenseFile": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/LICENSE",
+  "drivers": [
+    {
+      "id": "d030eba1-fce8-4838-8193-dc9f2bbc59bd",
+      "name": "Aqara SJCGQ11LM Water Leak Sensor",
+      "namespace": "velkovb",
+      "location": "https://raw.githubusercontent.com/velkovb/hubitat-drivers/main/drivers/aqara/sjcgq11lm/aqara-sjcgq11lm.groovy",
+      "required": true
+    }
+  ]
+}

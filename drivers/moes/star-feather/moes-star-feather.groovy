@@ -71,8 +71,8 @@ void initialize() {
         if (!child) {
             addChildDevice('hubitat', 'Generic Component Switch', childDni(gang),
                 [name: relayName, label: label, isComponent: true])
-        } else if (child.label in ["${device.displayName} EP" + String.format('%02d', gang),
-                                   "${device.displayName} - Gang ${gang}"]) {
+        } else if (child.label == "${device.displayName} EP${String.format('%02d', gang)}" ||
+                   child.label == "${device.displayName} - Gang ${gang}") {
             child.setLabel(label)
         }
     }
